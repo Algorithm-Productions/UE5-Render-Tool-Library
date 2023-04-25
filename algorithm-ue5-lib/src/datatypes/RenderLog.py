@@ -10,40 +10,40 @@ class RenderLog(StorableEntity):
     def __init__(
             self,
             cleared=False,
-            uuid='',
             jobUUID='',
-            timestamp=None,
-            message='',
             log='',
-            logType=None
+            logType=None,
+            message='',
+            timestamp=None,
+            uuid=''
     ):
         super().__init__(uuid)
-        self.jobUUID = jobUUID or ''
-        self.timestamp = timestamp or datetime.now().strftime("%m/%d/%Y, %H:%M:%S")
-        self.message = message or ''
-        self.log = log or ''
-        self.logType = logType or LogType.INFO
         self.cleared = cleared
+        self.jobUUID = jobUUID
+        self.log = log
+        self.logType = logType or LogType.INFO
+        self.message = message
+        self.timestamp = timestamp or datetime.now().strftime("%m/%d/%Y, %H:%M:%S")
 
     @classmethod
     def from_dict(cls, data):
-        uuid = data.get('uuid') or ''
-        jobUUID = data.get('jobUUID') or ''
-        timestamp = data.get('timestamp') or ''
-        message = data.get('message') or ''
-        log = data.get('log') or ''
-        logType = (data.get('logType').upper() if (
-                    data.get('logType') and LogType.contains(data.get('logType').upper())) else '')
-        cleared = data.get('cleared')
+        cleared = data["cleared"] if (data and data["cleared"]) else False
+        jobUUID = data["jobUUID"] if (data and data["jobUUID"]) else ''
+        log = data["log"] if (data and data["log"]) else ''
+        logType = data["logType"].upper() if \
+            (data and data["logType"] and LogType.contains(data["logType"].upper())) else LogType.INFO
+        message = data["message"] if (data and data["message"]) else ''
+        timestamp = data['timestamp'] if (data and data['timestamp']) else ''
+        uuid = data["uuid"] if (data and data["uuid"]) else ''
 
         return cls(
-            uuid=uuid,
+            cleared=cleared,
             jobUUID=jobUUID,
-            timestamp=timestamp,
-            message=message,
             log=log,
             logType=logType,
-            cleared=cleared
+            message=message,
+            timestamp=timestamp,
+            uuid=uuid
         )
 
     def __eq__(self, other):

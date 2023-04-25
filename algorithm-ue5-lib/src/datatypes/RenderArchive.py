@@ -19,13 +19,10 @@ class RenderArchive(StorableEntity):
             total_time='',
             uuid=''
     ):
-        if not frame_map:
-            frame_map = []
-
         super().__init__((uuid or render_request.uuid))
         self.avg_frame = avg_frame
         self.finish_time = finish_time
-        self.frame_map = frame_map
+        self.frame_map = [] if frame_map is None else frame_map
         self.hardware_stats = hardware_stats
         self.project_name = project_name
         self.render_request = render_request

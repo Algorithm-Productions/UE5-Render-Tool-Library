@@ -8,16 +8,9 @@ class ConsoleSettings(UnrealDataType):
             endConsoleCommands=None,
             startConsoleCommands=None
     ):
-        if not consoleVariables:
-            consoleVariables = {}
-        if not endConsoleCommands:
-            endConsoleCommands = []
-        if not startConsoleCommands:
-            startConsoleCommands = []
-
-        self.consoleVariables = consoleVariables
-        self.endConsoleCommands = endConsoleCommands
-        self.startConsoleCommands = startConsoleCommands
+        self.consoleVariables = {} if consoleVariables is None else consoleVariables
+        self.endConsoleCommands = [] if endConsoleCommands is None else endConsoleCommands
+        self.startConsoleCommands = [] if startConsoleCommands is None else startConsoleCommands
 
     @classmethod
     def from_dict(cls, data):

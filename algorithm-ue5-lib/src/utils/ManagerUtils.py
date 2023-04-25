@@ -1,21 +1,72 @@
+from datetime import datetime
 import time
 import uuid as genUUID
 
-from datetime import datetime
-
-from ..datatypes import HardwareStats, RenderArchive, RenderLog, RenderSettings
+from ..datatypes import HardwareStats, RenderArchive, RenderLog, RenderRequest, RenderSettings
 from ..datatypes.enums import LogType, RenderStatus
 
 
-def new_request_trigger(req, worker, logger):
-    if req.worker:
-        req.update({"status": RenderStatus.READY})
-        return
+def abstract_read(entity):
+    return entity.to_dict() if entity and entity.to_dict() else {}
 
-    assign_request(req, worker)
 
-    time.sleep(3)
-    logger.info('assigned job %s to %s', req.uuid, worker)
+def abstract_read_all(entities):
+    if not entities:
+        return {"results": []}
+
+    jsons = [entity.to_dict() if entity and entity.to_dict() else {} for entity in entities]
+    return {"results": jsons}
+
+
+def abstract_delete_all(entityType, shouldLog):
+    res = None
+    if entityType == "Archives":
+        res = RenderArchive.read_all()
+        RenderArchive.remove_all()
+    elif entityType == "Logs":
+        res = RenderLog.read_all()
+        RenderLog.remove_all()
+    elif entityType == "Requests":
+        res = RenderRequest.read_all()
+        RenderRequest.remove_all()
+
+    if not res:
+        return {"results": {}}
+    if shouldLog:
+        buildLog('', ['Deleting All {} from DB'.format(entityType), "WARN",
+                      'Deleting All {} from DB'.format(entityType),
+                      datetime.now().strftime("%m/%d/%Y, %H:%M:%S"), '']).save_self()
+
+    return {"results": [r.to_dict() if r else {} for r in res]}
+
+
+def abstract_delete(entityType, shouldLog, uuid):
+    res = None
+    if entityType == "Archive":
+        res = RenderArchive.read(uuid)
+    elif entityType == "Log":
+        res = RenderLog.read(uuid)
+    elif entityType == "Request":
+        res = RenderRequest.read(uuid)
+
+    if not res:
+        return {}
+    if shouldLog:
+        buildLog(uuid, ['Deleting {} {} from DB'.format(entityType, uuid), "WARN",
+                        'Deleting {} {} from DB'.format(entityType, uuid),
+                        datetime.now().strftime("%m/%d/%Y, %H:%M:%S"), uuid]).save_self()
+
+    res.remove_self()
+    return res.to_dict()
+
+
+def abstract_update(content, entity):
+    if (not content) or (not eval(content)) or (not entity):
+        return {}
+
+    parsedContent = eval(content)
+    entity.update(parsedContent)
+    return entity.to_dict()
 
 
 def assign_request(req, worker):
@@ -23,15 +74,14 @@ def assign_request(req, worker):
     req.update({"status": RenderStatus.READY})
 
 
-def buildArchive(uuid, renderRequest, metadata):
+def buildArchive(metadata, uuid, renderRequest):
     renderArchive = RenderArchive(uuid=uuid, render_request=renderRequest)
-    renderArchive.project_name = metadata[1]
+    renderArchive.avg_frame = float(metadata[4])
     renderArchive.hardware_stats = HardwareStats.from_dict(eval(metadata[2]))
     renderArchive.finish_time = metadata[3]
-    renderArchive.avg_frame = float(metadata[4])
     renderArchive.frame_map = metadata[5].strip('][').split(', ')
+    renderArchive.project_name = metadata[1]
     renderArchive.render_settings = RenderSettings.from_dict(eval(metadata[6]))
-
     renderArchive.total_time = str(
         datetime.strptime(renderArchive.finish_time, "%m/%d/%Y, %H:%M:%S") - datetime.strptime(
             renderRequest.time_created, "%m/%d/%Y, %H:%M:%S"))
@@ -40,8 +90,9 @@ def buildArchive(uuid, renderRequest, metadata):
 
 
 def buildLog(jobUUID, metadata):
-    return RenderLog(uuid=str(genUUID.uuid4())[:5], jobUUID=jobUUID, timestamp=metadata[1], message=metadata[2],
-                     log=metadata[3], logType=(metadata[4].upper() if LogType.contains(metadata[4].upper()) else ''))
+    return RenderLog(jobUUID=jobUUID, log=metadata[1],
+                     logType=(metadata[2].upper() if LogType.contains(metadata[4].upper()) else LogType.INFO),
+                     message=metadata[3], timestamp=metadata[4], uuid=str(genUUID.uuid4()))
 
 
 def checkAgeAndClear(log):
@@ -69,3 +120,14 @@ def getLogsToDisplay():
     returnList = [log.to_dict() for log in objList]
 
     return returnList
+
+
+def new_request_trigger(logger, req, worker):
+    if req.worker:
+        req.update({"status": RenderStatus.READY})
+        return
+
+    assign_request(req, worker)
+
+    time.sleep(3)
+    logger.info('assigned job %s to %s', req.uuid, worker)

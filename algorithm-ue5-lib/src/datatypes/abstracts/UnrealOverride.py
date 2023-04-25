@@ -13,24 +13,24 @@ class UnrealOverride(ABC, StorableProperty):
             if flags[key + "Flag"]:
                 unrealKey, unrealType = cls.UNREAL_MAPPINGS[key][0], cls.UNREAL_MAPPINGS[key][1]
                 if unrealType == "int":
-                    unrealObject.updateProperty(cls.UNREAL_SETTING_KEY, unrealKey, int(val))
+                    unrealObject.updateProperty(int(val), unrealKey, cls.UNREAL_SETTING_KEY)
                 elif unrealType == "float":
-                    unrealObject.updateProperty(cls.UNREAL_SETTING_KEY, unrealKey, float(val))
+                    unrealObject.updateProperty(float(val), unrealKey, cls.UNREAL_SETTING_KEY)
                 elif unrealType == "bool":
-                    unrealObject.updateProperty(cls.UNREAL_SETTING_KEY, unrealKey, bool(val))
+                    unrealObject.updateProperty(bool(val), unrealKey, cls.UNREAL_SETTING_KEY)
                 elif unrealType == "str":
-                    unrealObject.updateProperty(cls.UNREAL_SETTING_KEY, unrealKey, str(val))
+                    unrealObject.updateProperty(str(val), unrealKey, cls.UNREAL_SETTING_KEY)
                 elif unrealType == "array":
-                    unrealObject.updateArrayProperty(cls.UNREAL_SETTING_KEY, unrealKey, val)
+                    unrealObject.updateArrayProperty(val, unrealKey, cls.UNREAL_SETTING_KEY)
                 elif unrealType == "map":
-                    unrealObject.updateMapProperty(cls.UNREAL_SETTING_KEY, unrealKey, val)
+                    unrealObject.updateMapProperty(val, unrealKey, cls.UNREAL_SETTING_KEY)
                 elif unrealType == "path":
-                    unrealObject.updatePathProperty(cls.UNREAL_SETTING_KEY, unrealKey, str(val))
+                    unrealObject.updatePathProperty(str(val), unrealKey, cls.UNREAL_SETTING_KEY)
                 elif unrealType == "frameRate":
-                    unrealObject.updateFrameRateProperty(cls.UNREAL_SETTING_KEY, unrealKey, int(val))
+                    unrealObject.updateFrameRateProperty(int(val), unrealKey, cls.UNREAL_SETTING_KEY)
                 elif unrealType == "resolutionX":
-                    unrealObject.updateResolutionProperty(cls.UNREAL_SETTING_KEY, unrealKey, x=int(val), y=0)
+                    unrealObject.updateResolutionProperty(unrealKey, cls.UNREAL_SETTING_KEY, x=int(val), y=0)
                 elif unrealType == "resolutionY":
-                    unrealObject.updateResolutionProperty(cls.UNREAL_SETTING_KEY, unrealKey, y=int(val), x=0)
+                    unrealObject.updateResolutionProperty(unrealKey, cls.UNREAL_SETTING_KEY, y=int(val), x=0)
                 elif unrealType == "aaMethod":
-                    unrealObject.updateAAMethodProperty(cls.UNREAL_SETTING_KEY, unrealKey, str(val))
+                    unrealObject.updateAAMethodProperty(str(val), unrealKey, cls.UNREAL_SETTING_KEY)
