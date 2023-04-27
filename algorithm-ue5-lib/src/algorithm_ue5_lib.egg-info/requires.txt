@@ -1,0 +1,7 @@
+python-dotenv
+flask
+flask-cors
+GPUtil
+psutil
+eel
+requests

@@ -20,21 +20,12 @@ setuptools.setup(
     py_modules=["algorithm-ue5-lib"],
     package_dir={'': 'algorithm-ue5-lib/src'},
     install_requires=[
-        "logging",
-        "requests",
-        "datetime",
-        "os",
-        "platform",
-        "uuid",
+        "python-dotenv",
         "flask",
-        "statistics",
-        "time",
-        "GPUtil"
+        "flask-cors",
+        "GPUtil",
         "psutil",
-        "subprocess",
-        "threading",
-        "abc",
-        "json",
-        "socket"
+        "eel",
+        "requests"
     ]
 )

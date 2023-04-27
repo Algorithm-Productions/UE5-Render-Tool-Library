@@ -1,0 +1,15 @@
+Metadata-Version: 2.1
+Name: algorithm-ue5-lib
+Version: 0.0.1
+Summary: Utility Library for Algorithm's Render Farm Software
+Author: Algorithm Productions.ie
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.11
+Description-Content-Type: text/markdown
+License-File: LICENSE
+
+# Python Library for the UE5 Utilities used by Algorithm Products
+
+This package contains general util classes/datatypes used by the Team at Algorithm Products regarding their UE5 Render Farm tool.

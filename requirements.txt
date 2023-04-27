@@ -1,0 +1,10 @@
+python-dotenv
+flask
+flask-cors
+GPUtil
+psutil
+eel
+requests
+setuptools
+wheel
+twine

@@ -1,0 +1,13 @@
+LICENSE
+README.md
+setup.py
+algorithm-ue5-lib/src/algorithm_ue5_lib.egg-info/PKG-INFO
+algorithm-ue5-lib/src/algorithm_ue5_lib.egg-info/SOURCES.txt
+algorithm-ue5-lib/src/algorithm_ue5_lib.egg-info/dependency_links.txt
+algorithm-ue5-lib/src/algorithm_ue5_lib.egg-info/requires.txt
+algorithm-ue5-lib/src/algorithm_ue5_lib.egg-info/top_level.txt
+algorithm-ue5-lib/src/algorithm_ue5_lib.egg-info/PKG-INFO
+algorithm-ue5-lib/src/algorithm_ue5_lib.egg-info/SOURCES.txt
+algorithm-ue5-lib/src/algorithm_ue5_lib.egg-info/dependency_links.txt
+algorithm-ue5-lib/src/algorithm_ue5_lib.egg-info/requires.txt
+algorithm-ue5-lib/src/algorithm_ue5_lib.egg-info/top_level.txt
